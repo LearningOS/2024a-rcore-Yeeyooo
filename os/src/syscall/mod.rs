@@ -26,8 +26,13 @@ mod process;
 
 use fs::*;
 use process::*;
+use crate::task::record_syscall_times;
+
 /// handle syscall exception with `syscall_id` and other arguments
+/// 当用户空间通过ecall指令执行系统调用时, syscall函数被调用
+/// 在这种情况下, 处理器产生一个'Environment call from U-mode'的异常，作为一种分支情况在trap_handler中进行处理
 pub fn syscall(syscall_id: usize, args: [usize; 3]) -> isize {
+    record_syscall_times(syscall_id);
     match syscall_id {
         SYSCALL_WRITE => sys_write(args[0], args[1] as *const u8, args[2]),
         SYSCALL_EXIT => sys_exit(args[0] as i32),

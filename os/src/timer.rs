@@ -24,6 +24,7 @@ pub fn get_time_ms() -> usize {
 }
 
 /// get current time in microseconds
+/// 以微秒为单位返回当前计数器的值
 #[allow(dead_code)]
 pub fn get_time_us() -> usize {
     time::read() * MICRO_PER_SEC / CLOCK_FREQ

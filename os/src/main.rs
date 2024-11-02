@@ -100,8 +100,8 @@ pub fn rust_main() -> ! {
     heap_alloc::init_heap();
     trap::init();
     loader::load_apps();
-    trap::enable_timer_interrupt();
-    timer::set_next_trigger();
-    task::run_first_task();
+    trap::enable_timer_interrupt();  // 为了避免S特权级时钟中断被屏蔽，需要在执行第一个应用之前调用该函数设置sie.stie, 使得S特权级时钟中断不会被屏蔽
+    timer::set_next_trigger();       // 然后设置第一个10ms的计时器
+    task::run_first_task();          // 执行第一个应用
     panic!("Unreachable in rust_main!");
 }
